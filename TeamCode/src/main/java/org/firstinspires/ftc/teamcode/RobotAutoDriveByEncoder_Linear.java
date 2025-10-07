@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -61,8 +62,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Auto Drive By Encoder", group="Robot")
-@Disabled
+@Autonomous(name="Robot: Use This one", group="Robot")
+//@Disabled
 public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -71,6 +72,7 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
+    private DcMotor shooterMotor = null;
 
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -95,14 +97,15 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
         backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
+        shooterMotor = hardwareMap.get(DcMotor.class, "shooter_motor");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
 
 
@@ -128,7 +131,23 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderMecanumDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+//        encoderMecanumDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderMecanumDrive(DRIVE_SPEED, 30, 30, 5.0);
+        encoderMecanumDrive(DRIVE_SPEED, 10, 10, 5.0);
+
+
+        shooterMotor.setPower(1);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 5)) {
+            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+
+
+
+
 //        encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
 //        encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
 //        encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
@@ -160,11 +179,11 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
             newLeftTarget = frontLeftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
 //            newLeftTarget = backLeftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
             newRightTarget = frontRightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-//            newLeftTarget = backRightDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newLeftTarget = backRightDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
             frontLeftDrive.setTargetPosition(newLeftTarget);
-//            backLeftDrive.setTargetPosition(newLeftTarget);
+            backLeftDrive.setTargetPosition(newLeftTarget);
             frontRightDrive.setTargetPosition(newRightTarget);
-//            backRightDrive.setTargetPosition(newRightTarget);
+            backRightDrive.setTargetPosition(newRightTarget);
 
             // Turn On RUN_TO_POSITION
             frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
