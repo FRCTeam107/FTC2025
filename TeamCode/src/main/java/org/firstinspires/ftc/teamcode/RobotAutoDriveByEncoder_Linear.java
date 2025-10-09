@@ -29,12 +29,17 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 /*
  * This OpMode illustrates the concept of driving a path based on encoder counts.
@@ -73,6 +78,7 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
     private DcMotor shooterMotor = null;
+    private IMU             imu         = null;
 
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -92,6 +98,19 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+
+        /* The next two lines define Hub orientation.
+         * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
+         *
+         * To Do:  EDIT these two lines to match YOUR mounting configuration.
+         */
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+
+        imu = hardwareMap.get(IMU.class, "imu");
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
+
         // Initialize the drive system variables.
         frontLeftDrive = hardwareMap.get(DcMotor.class, "front_left_drive");
         backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
@@ -106,6 +125,13 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
 
 
 
@@ -126,14 +152,16 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
                 backRightDrive.getCurrentPosition());
         telemetry.update();
 
+
+
         // Wait for the game to start (driver presses START)
         waitForStart();
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
 //        encoderMecanumDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        encoderMecanumDrive(DRIVE_SPEED, 30, 30, 5.0);
-        encoderMecanumDrive(DRIVE_SPEED, 10, 10, 5.0);
+        encoderMecanumDrive(DRIVE_SPEED, 27, 27, 5.0);
+        encoderMecanumDrive(DRIVE_SPEED, 4, -4, 5.0);
 
 
         shooterMotor.setPower(1);
@@ -144,7 +172,14 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
             telemetry.update();
         }
 
+        shooterMotor.setPower(0);
 
+        encoderMecanumDrive(DRIVE_SPEED, -3, 3, 5.0);
+        encoderMecanumDrive(DRIVE_SPEED, -15, -15, 5.0);
+
+
+        encoderMecanumDrive(DRIVE_SPEED, -8, 8, 5.0);
+        encoderMecanumDrive(DRIVE_SPEED, 4, 4, 5.0);
 
 
 
@@ -231,6 +266,50 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
         }
     }
 
+
+//    public void driveForward(double speed, double forwardInches, double timeoutS) {
+//        if (!opModeIsActive()) return;
+//
+//        int targetPosition = frontLeftDrive.getCurrentPosition() + (int)(forwardInches * COUNTS_PER_INCH);
+//        runtime.reset();
+//
+//        double direction = forwardInches > 0 ? 1.0 : -1.0;
+//
+//        while (opModeIsActive() &&
+//                runtime.seconds() < timeoutS &&
+//                direction * frontLeftDrive.getCurrentPosition() < direction * targetPosition) {
+//
+//            getYaw();
+//            double error = CURRENT_YAW - robotDesiredDirection;
+//
+//            // Handle wraparound near ±180°
+//            if (robotDesiredDirection > 130 && CURRENT_YAW < 0) {
+//                error = CURRENT_YAW + 360 - robotDesiredDirection;
+//            } else if (robotDesiredDirection < -130 && CURRENT_YAW > 0) {
+//                error = CURRENT_YAW - 360 - robotDesiredDirection;
+//            }
+//
+//            double correction = error * 0.01;
+//            telemetry.addData("modifier", "%.2f Deg. (Heading)", correction);
+//            telemetry.update();
+//
+//            double leftPower = direction * speed + correction;
+//            double rightPower = direction * speed - correction;
+//
+//            frontLeftDrive.setPower(leftPower);
+//            backLeftDrive.setPower(leftPower);
+//            frontRightDrive.setPower(rightPower);
+//            backRightDrive.setPower(rightPower);
+//        }
+//    }
+
+
+//    public void getYaw(){
+//        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+//        CURRENT_YAW = orientation.getYaw(AngleUnit.DEGREES);
+//        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", CURRENT_YAW);
+//        telemetry.update();
+//    }
 //    /*
 //     *  Method to perform a relative move, based on encoder counts.
 //     *  Encoders are not reset as the move is based on the current position.

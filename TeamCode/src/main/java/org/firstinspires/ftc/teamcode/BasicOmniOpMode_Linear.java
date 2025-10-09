@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -75,6 +76,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
     private DcMotor shooterMotor = null;
+    private CRServo indexservo = null;
 
     @Override
     public void runOpMode() {
@@ -86,6 +88,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
         shooterMotor = hardwareMap.get(DcMotor.class, "shooter_motor");
+        indexservo = hardwareMap.get(CRServo.class, "index_servo");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -140,7 +143,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             }
 
             if (gamepad1.a){
-                shooterMotor.setPower(0.75);
+                shooterMotor.setPower(1);
             }
             else {
                 shooterMotor.setPower(0);
