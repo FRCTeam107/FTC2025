@@ -76,7 +76,8 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
     private DcMotor shooterMotor = null;
-    private CRServo indexservo = null;
+    private CRServo indexServo1 = null;
+    private CRServo indexServo2 = null;
 
     @Override
     public void runOpMode() {
@@ -88,7 +89,10 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
         shooterMotor = hardwareMap.get(DcMotor.class, "shooter_motor");
-        indexservo = hardwareMap.get(CRServo.class, "index_servo");
+        indexServo1 = hardwareMap.get(CRServo.class, "index_servo_1");
+        indexServo2 = hardwareMap.get(CRServo.class, "index_servo_2");
+
+
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -105,6 +109,8 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         shooterMotor.setDirection(DcMotor.Direction.FORWARD);
+        shooterMotor.setDirection(DcMotor.Direction.FORWARD);
+
 
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
@@ -148,6 +154,18 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             else {
                 shooterMotor.setPower(0);
             }
+
+
+            if (gamepad1.right_bumper){
+                indexServo1.setPower(1);
+                indexServo2.setPower(-1);
+            }
+            else {
+                indexServo1.setPower(0);
+                indexServo2.setPower(0);
+            }
+
+
             // This is test code:
             //
             // Uncomment the following code to test your motor directions.
