@@ -65,7 +65,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: shellycode", group="Linear OpMode")
+@TeleOp(name="Telop: Go Vroom", group="Linear OpMode")
 //@Disabled
 public class BasicOmniOpMode_Linear extends LinearOpMode {
 
@@ -76,10 +76,8 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
     private DcMotor shooterMotor = null;
-    private CRServo         indexServo1    = null;
-    private CRServo         indexServo2 = null;
-
-
+    private CRServo indexServo1 = null;
+    private CRServo indexServo2 = null;
 
     @Override
     public void runOpMode() {
@@ -91,9 +89,10 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
         shooterMotor = hardwareMap.get(DcMotor.class, "shooter_motor");
+        indexServo1 = hardwareMap.get(CRServo.class, "index_servo_1");
+        indexServo2 = hardwareMap.get(CRServo.class, "index_servo_2");
 
-        indexServo1 = hardwareMap.get(CRServo.class,"index_servo_1");
-        indexServo2 = hardwareMap.get(CRServo.class,"index_servo_2");
+
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -106,15 +105,22 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         // Reverse the direction (flip FORWARD <-> REVERSE ) of any wheel that runs backward
         // Keep testing until ALL the wheels move the robot forward when you push the left joystick forward.
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         shooterMotor.setDirection(DcMotor.Direction.FORWARD);
+        shooterMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        // tells the driver whats up
+
         waitForStart();
         runtime.reset();
 
@@ -141,10 +147,10 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             max = Math.max(max, Math.abs(backRightPower));
 
             if (max > 1.0) {
-                frontLeftPower /= max;
+                frontLeftPower  /= max;
                 frontRightPower /= max;
-                backLeftPower /= max;
-                backRightPower /= max;
+                backLeftPower   /= max;
+                backRightPower  /= max;
             }
 
             if (gamepad1.a){
@@ -154,6 +160,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
                 shooterMotor.setPower(0);
             }
 
+
             if (gamepad1.right_bumper){
                 indexServo1.setPower(1);
                 indexServo2.setPower(-1);
@@ -162,6 +169,8 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
                 indexServo1.setPower(0);
                 indexServo2.setPower(0);
             }
+
+
             // This is test code:
             //
             // Uncomment the following code to test your motor directions.
@@ -186,10 +195,9 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             backRightDrive.setPower(backRightPower);
 
             // Show the elapsed game time and wheel power.
-            telemetry.addData("Status","Run Time: " + runtime.toString());
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
             telemetry.update();
         }
-    }
-    }
+    }}
