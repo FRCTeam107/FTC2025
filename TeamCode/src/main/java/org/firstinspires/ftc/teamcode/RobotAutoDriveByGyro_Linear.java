@@ -33,6 +33,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -94,12 +95,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
-    private DcMotor         frontLeftDrive   = null;
-    private DcMotor         frontRightDrive  = null;
-    private IMU             imu         = null;      // Control/Expansion Hub IMU
-    private DcMotor         backLeftDrive   = null;
-    private DcMotor         backRightDrive  = null;
-
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor frontLeftDrive   = null;
+    private DcMotor frontRightDrive  = null;
+    private IMU     imu         = null;      // Control/Expansion Hub IMU
+    private DcMotor backLeftDrive   = null;
+    private DcMotor backRightDrive  = null;
+    private DcMotor shooterMotor = null;
+    private CRServo indexServo1 = null;
+    private CRServo indexServo2 = null;
 
     private double          headingError  = 0;
 
@@ -127,8 +131,8 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.4;     // Max driving speed for better distance accuracy.
-    static final double     TURN_SPEED              = 0.2;     // Max turn speed to limit turn rate.
+    static final double     DRIVE_SPEED             = 1.0346;     // Max driving speed for better distance accuracy.
+    static final double     TURN_SPEED              = 1.0;     // Max turn speed to limit turn rate.
     static final double     HEADING_THRESHOLD       = 1.0 ;    // How close must the heading get to the target before moving to next step.
                                                                // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
@@ -143,10 +147,13 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
     public void runOpMode() {
 
         // Initialize the drive system variables.
-        frontLeftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        frontRightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        backLeftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        backRightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        frontLeftDrive = hardwareMap.get(DcMotor.class, "front_left_drive");
+        backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
+        frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
+        backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
+        shooterMotor = hardwareMap.get(DcMotor.class, "shooter_motor");
+        indexServo1 = hardwareMap.get(CRServo.class, "index_servo_1");
+        indexServo2 = hardwareMap.get(CRServo.class, "index_servo_2");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -156,13 +163,17 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         /* The next two lines define Hub orientation.
          * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
          *
          * To Do:  EDIT these two lines to match YOUR mounting configuration.
          */
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
@@ -193,19 +204,34 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
 
-        driveStraight(DRIVE_SPEED, 24.0, 0.0);    // Drive Forward 24"
-        turnToHeading( TURN_SPEED, -45.0);               // Turn  CW to -45 Degrees
-        holdHeading( TURN_SPEED, -45.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
+        driveStraight(DRIVE_SPEED, 75.0, 0.0);    // Drive Forward 24"
+        turnToHeading( TURN_SPEED, -47.0);               // Turn  CW to -45 Degrees y9-\
+        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
 
-        driveStraight(DRIVE_SPEED, 17.0, -45.0);  // Drive Forward 17" at -45 degrees (12"x and 12"y)
-        turnToHeading( TURN_SPEED,  45.0);               // Turn  CCW  to  45 Degrees
-        holdHeading( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
+      shooterMotor.setPower(1);
+      sleep(2000);
+      indexServo1.setPower(1);
+      indexServo2.setPower(-1);
+      sleep(10000);
+      shooterMotor.setPower(0);
 
-        driveStraight(DRIVE_SPEED, 17.0, 45.0);  // Drive Forward 17" at 45 degrees (-12"x and 12"y)
-        turnToHeading( TURN_SPEED,   0.0);               // Turn  CW  to 0 Degrees
-        holdHeading( TURN_SPEED,   0.0, 1.0);    // Hold  0 Deg heading for 1 second
+        indexServo1.setPower(0);
+        indexServo2.setPower(0);
 
-        driveStraight(DRIVE_SPEED,-48.0, 0.0);    // Drive in Reverse 48" (should return to approx. staring position)
+        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
+        holdHeading( TURN_SPEED, 47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
+        driveStraight(DRIVE_SPEED, -75.0, 0.0);    // Drive Forward 24"
+
+
+//        driveStraight(DRIVE_SPEED, 17.0, -45.0);  // Drive Forward 17" at -45 degrees (12"x and 12"y)
+//        turnToHeading( TURN_SPEED,  45.0);               // Turn  CCW  to  45 Degrees
+//        holdHeading( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
+//
+//        driveStraight(DRIVE_SPEED, 17.0, 45.0);  // Drive Forward 17" at 45 degrees (-12"x and 12"y)
+//        turnToHeading( TURN_SPEED,   0.0);               // Turn  CW  to 0 Degrees
+//        holdHeading( TURN_SPEED,   0.0, 1.0);    // Hold  0 Deg heading for 1 second
+//
+//        driveStraight(DRIVE_SPEED,-48.0, 0.0);    // Drive in Reverse 48" (should return to approx. staring position)
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -403,7 +429,9 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
         }
 
         frontLeftDrive.setPower(leftSpeed);
+        backLeftDrive.setPower(leftSpeed);
         frontRightDrive.setPower(rightSpeed);
+        backRightDrive.setPower(rightSpeed);
     }
 
     /**

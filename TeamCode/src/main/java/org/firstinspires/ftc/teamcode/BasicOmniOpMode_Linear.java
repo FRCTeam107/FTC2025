@@ -109,7 +109,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         shooterMotor.setDirection(DcMotor.Direction.FORWARD);
-        shooterMotor.setDirection(DcMotor.Direction.FORWARD);
+
 
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
