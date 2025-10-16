@@ -31,16 +31,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 /*
  * This OpMode illustrates the concept of driving a path based on encoder counts.
@@ -70,7 +65,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name="Robot: Use This one", group="Robot")
 //@Disabled
-public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
+public class long_drive_red extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -89,7 +84,7 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -164,11 +159,19 @@ public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
 //        encoderMecanumDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        encoderMecanumDrive(DRIVE_SPEED, 27, 27, 5.0);
-        encoderMecanumDrive(DRIVE_SPEED, 4, -4, 5.0);
-
-
+        encoderMecanumDrive(DRIVE_SPEED, 100, 100, 5.0);
+        encoderMecanumDrive(DRIVE_SPEED, 13.5, -13.5, 5.0);
+        encoderMecanumDrive(DRIVE_SPEED,12,12,3.0);
         shooterMotor.setPower(1);
+        sleep(2000);
+        indexServo1.setPower(1);
+        indexServo2.setPower(1);
+        sleep(2000);
+        encoderMecanumDrive(DRIVE_SPEED,-14,-14,2.0);
+        sleep(2000);
+        shooterMotor.setPower(0);
+        indexServo2.setPower(0);
+        indexServo1.setPower(0);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 5)) {
