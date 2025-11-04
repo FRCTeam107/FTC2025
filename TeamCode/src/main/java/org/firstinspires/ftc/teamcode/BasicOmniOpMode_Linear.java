@@ -154,7 +154,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             }
 
             if (gamepad1.a){
-                shooterMotor.setPower(1);
+                shooterMotor.setPower(0.7 );
             }
             else {
                 shooterMotor.setPower(0);
