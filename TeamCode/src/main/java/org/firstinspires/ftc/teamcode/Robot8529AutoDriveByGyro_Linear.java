@@ -211,7 +211,7 @@ public class Robot8529AutoDriveByGyro_Linear extends LinearOpMode {
         turnToHeading( TURN_SPEED, -47.0);               // Turn  CW to -45 Degrees y9-\
 //        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
         driveStraight(DRIVE_SPEED, 50,-47.0);
-
+        sleep(5000);
         //shoot1
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -223,7 +223,7 @@ public class Robot8529AutoDriveByGyro_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-
+        sleep(5000);
         //shoot2
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -235,7 +235,7 @@ public class Robot8529AutoDriveByGyro_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-
+        sleep(5000);
         //shoot3
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
