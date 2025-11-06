@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -89,9 +90,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: 8529Blue Long", group="Robot")
+@Autonomous(name="Robot: 8529Red Long", group="Robot")
 
-public class Robot8529_2AutoDriveByGyro_Linear extends LinearOpMode {
+public class Robot8529AutonRedLong_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -100,9 +101,10 @@ public class Robot8529_2AutoDriveByGyro_Linear extends LinearOpMode {
     private IMU     imu         = null;      // Control/Expansion Hub IMU
     private DcMotor backLeftDrive   = null;
     private DcMotor backRightDrive  = null;
-    private DcMotor shooterMotor = null;
+    private DcMotorEx shooterMotor = null;
     private CRServo indexServo1 = null;
     private CRServo indexServo2 = null;
+
 
     private double          headingError  = 0;
 
@@ -145,12 +147,14 @@ public class Robot8529_2AutoDriveByGyro_Linear extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        double targetVelocity = 1600;
+
         // Initialize the drive system variables.
         frontLeftDrive = hardwareMap.get(DcMotor.class, "front_left_drive");
         backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
-        shooterMotor = hardwareMap.get(DcMotor.class, "shooter_motor");
+        shooterMotor = hardwareMap.get(DcMotorEx.class, "shooter_motor");
         indexServo1 = hardwareMap.get(CRServo.class, "index_servo_1");
         indexServo2 = hardwareMap.get(CRServo.class, "index_servo_2");
 
@@ -204,32 +208,70 @@ public class Robot8529_2AutoDriveByGyro_Linear extends LinearOpMode {
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
 
         driveStraight(DRIVE_SPEED, 70.0, 0.0);    // Drive Forward 24"
-        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees y9-\
+        turnToHeading( TURN_SPEED, -47.0);               // Turn  CW to -45 Degrees y9-\
 //        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
-        driveStraight(DRIVE_SPEED, 50,47.0);
-        shooterMotor.setPower(.6);
-        sleep(2500);
-        //shoot 1
+        driveStraight(DRIVE_SPEED, 50,-47.0);
+        sleep(5000);
+        //shoot1
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
         indexServo1.setPower(1);
         indexServo2.setPower(-1);
-        sleep(1000);
-        indexServo1.setPower(0);
-        indexServo2.setPower(0);
-        sleep(1000);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
+        sleep(5000);
         //shoot2
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
         indexServo1.setPower(1);
         indexServo2.setPower(-1);
-        sleep(250);
-        indexServo1.setPower(0);
-        indexServo2.setPower(0);
-        sleep(1000);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
+        sleep(5000);
         //shoot3
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
         indexServo1.setPower(1);
         indexServo2.setPower(-1);
-        sleep(1000);
-        indexServo1.setPower(0);
-        indexServo2.setPower(0);
-        shooterMotor.setPower(0);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
+
+//
+//        shooterMotor.setPower(.6);
+//        sleep(2500);
+//        //shoot 1
+//        indexServo1.setPower(1);
+//        indexServo2.setPower(-1);
+//        sleep(1000);
+//        indexServo1.setPower(0);
+//        indexServo2.setPower(0);
+//        sleep(1000);
+//        //shoot2
+//        indexServo1.setPower(1);
+//        indexServo2.setPower(-1);
+//        sleep(250);
+//        indexServo1.setPower(0);
+//        indexServo2.setPower(0);
+//        sleep(1000);
+//        //shoot3
+//        indexServo1.setPower(1);
+//        indexServo2.setPower(-1);
+//        sleep(1000);
+//        indexServo1.setPower(0);
+//        indexServo2.setPower(0);
+//        shooterMotor.setPower(0);
 
 
 //        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
