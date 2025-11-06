@@ -31,10 +31,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -90,9 +90,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: 15339 Red Long", group="Robot")
+@Autonomous(name="Robot: 8529Blue Long", group="Robot")
 
-public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
+public class Robot8529BlueLong_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -101,7 +101,7 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
     private IMU     imu         = null;      // Control/Expansion Hub IMU
     private DcMotor backLeftDrive   = null;
     private DcMotor backRightDrive  = null;
-    private DcMotor shooterMotor = null;
+    private DcMotorEx shooterMotor = null;
     private CRServo indexServo1 = null;
     private CRServo indexServo2 = null;
 
@@ -146,12 +146,15 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+
+        double targetVelocity = 1400;
+
         // Initialize the drive system variables.
         frontLeftDrive = hardwareMap.get(DcMotor.class, "front_left_drive");
         backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
-        shooterMotor = hardwareMap.get(DcMotor.class, "shooter_motor");
+        shooterMotor = hardwareMap.get(DcMotorEx.class, "shooter_motor");
         indexServo1 = hardwareMap.get(CRServo.class, "index_servo_1");
         indexServo2 = hardwareMap.get(CRServo.class, "index_servo_2");
 
@@ -162,18 +165,18 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-//
-//        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         /* The next two lines define Hub orientation.
          * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
          *
          * To Do:  EDIT these two lines to match YOUR mounting configuration.
          */
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
@@ -187,8 +190,6 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
         frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Wait for the game to start (Display Gyro value while waiting)
         while (opModeInInit()) {
@@ -206,33 +207,51 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
 
-        driveStraight(DRIVE_SPEED, 65.0, 0.0);    // Drive Forward 24"
-        turnToHeading( TURN_SPEED, -47.0);               // Turn  CW to -45 Degrees y9-\
-        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
-        driveStraight(DRIVE_SPEED, 50,-47.0);
-      shooterMotor.setPower(.6);
-      sleep(2500);
-      //shoot 1
-      indexServo1.setPower(1);
-      indexServo2.setPower(-1);
-        sleep(1000);
-        indexServo1.setPower(0);
-        indexServo2.setPower(0);
-        sleep(1000);
-        //shoot2
-        indexServo1.setPower(1);
-        indexServo2.setPower(-1);
+        driveStraight(DRIVE_SPEED, 112.0, 0.0);    // Drive Forward 24"
         sleep(250);
-        indexServo1.setPower(0);
-        indexServo2.setPower(0);
-        sleep(1000);
-        //shoot3
+        turnToHeading( TURN_SPEED, 90.5);               // Turn  CW to -45 Degrees y9-\
+//        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
+        sleep(250);
+        driveStraight(DRIVE_SPEED, 30,70.5);
+        shooterMotor.setPower(.6);
+        sleep(2500);
+        //shoot 1
+        //shoot1
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
         indexServo1.setPower(1);
         indexServo2.setPower(-1);
-        sleep(1000);
-        indexServo1.setPower(0);
-        indexServo2.setPower(0);
-        shooterMotor.setPower(0);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
+        sleep(5000);
+        //shoot2
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
+        indexServo1.setPower(1);
+        indexServo2.setPower(-1);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
+        sleep(5000);
+        //shoot3
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
+        indexServo1.setPower(1);
+        indexServo2.setPower(-1);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
+
 
 
 //        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
