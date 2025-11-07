@@ -92,7 +92,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name="Robot: 15339 Red Long", group="Robot")
 
-public class Robot15339RedLong_Linear extends LinearOpMode {
+public class Robot15339RedShort_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -210,12 +210,11 @@ public class Robot15339RedLong_Linear extends LinearOpMode {
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
 
-        driveStraight(DRIVE_SPEED, 65.0, 0.0);    // Drive Forward 24"
-        turnToHeading( TURN_SPEED, -47.0);               // Turn  CW to -45 Degrees y9-\
-        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
-        driveStraight(DRIVE_SPEED, 50,-47.0);
-      shooterMotor.setPower(.6);
-      sleep(2500);
+//        driveStraight(DRIVE_SPEED, 65.0, 0.0);    // Drive Forward 24"
+//        turnToHeading( TURN_SPEED, -47.0);               // Turn  CW to -45 Degrees y9-\
+//        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
+//        driveStraight(DRIVE_SPEED, 50,-47.0);
+
         sleep(5000);
         //shoot1
         shooterMotor.setVelocity(targetVelocity);
