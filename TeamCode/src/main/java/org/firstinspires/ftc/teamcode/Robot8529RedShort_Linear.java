@@ -92,7 +92,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name="Robot: 15339 Red Short", group="Robot")
 
-public class Robot15339RedShort_Linear extends LinearOpMode {
+public class Robot8529RedShort_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
