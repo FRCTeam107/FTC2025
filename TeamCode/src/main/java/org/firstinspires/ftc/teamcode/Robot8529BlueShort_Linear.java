@@ -90,7 +90,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: 8529Blue Short", group="Robot")
+@Autonomous(name="Robot: 8529 Blue Short", group="Robot")
 
 public class Robot8529BlueShort_Linear extends LinearOpMode {
 

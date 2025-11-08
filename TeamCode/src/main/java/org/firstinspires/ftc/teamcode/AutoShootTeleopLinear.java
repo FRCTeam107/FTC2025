@@ -79,7 +79,7 @@ public class AutoShootTeleopLinear extends LinearOpMode {
     private CRServo indexServo2 = null;
 
 
-    double targetVelocity = 1400;
+    double targetVelocity = 1250;
 
     @Override
     public void runOpMode() {
@@ -179,8 +179,13 @@ public class AutoShootTeleopLinear extends LinearOpMode {
             if(gamepad2.b){
 
                 shooterMotor.setVelocity(targetVelocity);
+                frontLeftDrive.setPower(0);
+                frontRightDrive.setPower(0);
+                backLeftDrive.setPower(0);
+                backRightDrive.setPower(0);
 
                 while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+
                     telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
                     telemetry.update();
                 }
