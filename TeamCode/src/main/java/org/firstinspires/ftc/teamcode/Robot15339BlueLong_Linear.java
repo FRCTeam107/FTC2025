@@ -146,7 +146,7 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        double targetVelocity = 1400;
+        double targetVelocity = 1300;
 
 
         // Initialize the drive system variables.
@@ -176,7 +176,7 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
          *
          * To Do:  EDIT these two lines to match YOUR mounting configuration.
          */
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
@@ -206,12 +206,12 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
-
-        driveStraight(DRIVE_SPEED, 70.0, 0.0);    // Drive Forward 24"
+        shooterMotor.setVelocity(targetVelocity);
+        driveStraight(DRIVE_SPEED, 67.0, 0.0);    // Drive Forward 24"
         turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees y9-\
 //        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
         driveStraight(DRIVE_SPEED, 50,47.0);
-        shooterMotor.setPower(.6);
+
         sleep(2500);
         //shoot1
         shooterMotor.setVelocity(targetVelocity);
@@ -219,12 +219,13 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
             telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
             telemetry.update();
         }
+        sleep(1000);
         indexServo1.setPower(1);
         indexServo2.setPower(-1);
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-        sleep(5000);
+        sleep(1000);
         //shoot2
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -236,7 +237,7 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-        sleep(5000);
+        sleep(1000);
         //shoot3
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -248,6 +249,20 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
+        sleep(1000);
+        //shoot4
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
+        indexServo1.setPower(1);
+        indexServo2.setPower(-1);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
+
+
 
 
 //        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees

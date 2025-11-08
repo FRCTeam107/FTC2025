@@ -159,7 +159,7 @@ public class AutoShootTeleopLinear extends LinearOpMode {
                 backRightPower  /= max;
             }
 
-            if (gamepad1.a){
+            if (gamepad2.a){
                 shooterMotor.setPower(1);
 
 //                double velocity = shooterMotor.getVelocity(); // ticks per second
@@ -172,11 +172,11 @@ public class AutoShootTeleopLinear extends LinearOpMode {
                 shooterMotor.setPower(0);
             }
 
-            if(gamepad1.y){
+            if(gamepad2.y){
                 shooterMotor.setPower(-1);
             }
 
-            if(gamepad1.b){
+            if(gamepad2.b){
 
                 shooterMotor.setVelocity(targetVelocity);
 

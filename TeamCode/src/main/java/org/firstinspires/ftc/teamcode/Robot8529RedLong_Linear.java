@@ -105,7 +105,6 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
     private CRServo indexServo1 = null;
     private CRServo indexServo2 = null;
 
-
     private double          headingError  = 0;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -128,14 +127,14 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-                                                      (WHEEL_DIAMETER_INCHES * 3.1415);
+            (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
     static final double     DRIVE_SPEED             = 1.0346;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 1.0;     // Max turn speed to limit turn rate.
     static final double     HEADING_THRESHOLD       = 1.0 ;    // How close must the heading get to the target before moving to next step.
-                                                               // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
+    // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
     // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
     // Increase these numbers if the heading does not correct strongly enough (eg: a heavy robot or using tracks)
@@ -147,7 +146,9 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        double targetVelocity = 1600;
+        double targetVelocity = 1300;
+
+
 
         // Initialize the drive system variables.
         frontLeftDrive = hardwareMap.get(DcMotor.class, "front_left_drive");
@@ -165,11 +166,11 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-
-        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         /* The next two lines define Hub orientation.
          * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
@@ -190,6 +191,8 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
         frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Wait for the game to start (Display Gyro value while waiting)
         while (opModeInInit()) {
@@ -207,23 +210,25 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
 
-        driveStraight(DRIVE_SPEED, 70.0, 0.0);    // Drive Forward 24"
+        driveStraight(DRIVE_SPEED, 67.0, 0.0);    // Drive Forward 24"
         turnToHeading( TURN_SPEED, -47.0);               // Turn  CW to -45 Degrees y9-\
-//        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
+        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
         driveStraight(DRIVE_SPEED, 50,-47.0);
-        sleep(5000);
+//      shooterMotor.setPower(.6);
+        sleep(100);
         //shoot1
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
             telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
             telemetry.update();
         }
+        sleep(1000);
         indexServo1.setPower(1);
         indexServo2.setPower(-1);
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-        sleep(5000);
+        sleep(1000);
         //shoot2
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -235,7 +240,7 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-        sleep(5000);
+        sleep(1000);
         //shoot3
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -247,31 +252,18 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-
-//
-//        shooterMotor.setPower(.6);
-//        sleep(2500);
-//        //shoot 1
-//        indexServo1.setPower(1);
-//        indexServo2.setPower(-1);
-//        sleep(1000);
-//        indexServo1.setPower(0);
-//        indexServo2.setPower(0);
-//        sleep(1000);
-//        //shoot2
-//        indexServo1.setPower(1);
-//        indexServo2.setPower(-1);
-//        sleep(250);
-//        indexServo1.setPower(0);
-//        indexServo2.setPower(0);
-//        sleep(1000);
-//        //shoot3
-//        indexServo1.setPower(1);
-//        indexServo2.setPower(-1);
-//        sleep(1000);
-//        indexServo1.setPower(0);
-//        indexServo2.setPower(0);
-//        shooterMotor.setPower(0);
+        sleep(1000);
+        //shoot4
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
+        indexServo1.setPower(1);
+        indexServo2.setPower(-1);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
 
 
 //        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
@@ -304,17 +296,17 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
     // **********  HIGH Level driving functions.  ********************
 
     /**
-    *  Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.
-    *  Move will stop if either of these conditions occur:
-    *  1) Move gets to the desired position
-    *  2) Driver stops the OpMode running.
-    *
-    * @param maxDriveSpeed MAX Speed for forward/rev motion (range 0 to +1.0) .
-    * @param distance   Distance (in inches) to move from current position.  Negative distance means move backward.
-    * @param heading      Absolute Heading Angle (in Degrees) relative to last gyro reset.
-    *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-    *                   If a relative angle is required, add/subtract from the current robotHeading.
-    */
+     *  Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.
+     *  Move will stop if either of these conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Driver stops the OpMode running.
+     *
+     * @param maxDriveSpeed MAX Speed for forward/rev motion (range 0 to +1.0) .
+     * @param distance   Distance (in inches) to move from current position.  Negative distance means move backward.
+     * @param heading      Absolute Heading Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from the current robotHeading.
+     */
     public void driveStraight(double maxDriveSpeed,
                               double distance,
                               double heading) {
@@ -341,7 +333,7 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                   (frontLeftDrive.isBusy() && frontRightDrive.isBusy())) {
+                    (frontLeftDrive.isBusy() && frontRightDrive.isBusy())) {
 
                 // Determine required steering to keep on heading
                 turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
