@@ -264,15 +264,17 @@ public class Robot15339RedShort_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
+        sleep(1000);
+        turnToHeading(TURN_SPEED,110);
+        driveStraight(DRIVE_SPEED, 30.0, 110.0);    // Drive Forward 24"
 
-
-//        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
-//        holdHeading( TURN_SPEED, 47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
-//        driveStraight(DRIVE_SPEED, -75.0, 0.0);    // Drive Forward 24"
-
-
+//     Heading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
+//       holdHeading( TURN_SPEED, 47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
+//       driveStraight(DRIVE_SPEED, -75.0, 0.0);    // Drive Forward 24"
+//
+//
 //        driveStraight(DRIVE_SPEED, 17.0, -45.0);  // Drive Forward 17" at -45 degrees (12"x and 12"y)
-//        turnToHeading( TURN_SPEED,  45.0);               // Turn  CCW  to  45 Degrees
+//        turnToH   turnToeading( TURN_SPEED,  45.0);               // Turn  CCW  to  45 Degrees
 //        holdHeading( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
 //
 //        driveStraight(DRIVE_SPEED, 17.0, 45.0);  // Drive Forward 17" at 45 degrees (-12"x and 12"y)

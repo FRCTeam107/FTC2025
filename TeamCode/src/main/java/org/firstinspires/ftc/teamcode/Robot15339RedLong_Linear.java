@@ -225,7 +225,7 @@ public class Robot15339RedLong_Linear extends LinearOpMode {
         sleep(1000);
         indexServo1.setPower(1);
         indexServo2.setPower(-1);
-        sleep(250); // feed duration
+        sleep(350); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
         sleep(1000);
@@ -264,6 +264,9 @@ public class Robot15339RedLong_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
+        sleep(1000);
+        turnToHeading(TURN_SPEED,-177);
+        driveStraight(DRIVE_SPEED, 30.0, -177.0);    // Drive Forward 24"
 
 
 //        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
