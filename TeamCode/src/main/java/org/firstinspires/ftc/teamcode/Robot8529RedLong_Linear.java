@@ -265,6 +265,20 @@ public class Robot8529RedLong_Linear extends LinearOpMode {
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
 
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
+        indexServo1.setPower(1);
+        indexServo2.setPower(-1);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
+        sleep(5000);
+        turnToHeading(1,-179);
+        driveStraight(1, 25, -179);
+
 
 //        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
 //        holdHeading( TURN_SPEED, 47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second

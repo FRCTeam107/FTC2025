@@ -53,7 +53,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  *
  */
-@TeleOp(name = "Robot: 15339 Field Relative Mecanum Drive", group = "Robot")
+@TeleOp(name = "Robot: 15339 Field Drive", group = "Robot")
 //@Disabled
 public class Robot15339TeleopMecanumFieldRelativeDrive extends LinearOpMode {
     // This declares the four motors needed
@@ -121,6 +121,8 @@ public class Robot15339TeleopMecanumFieldRelativeDrive extends LinearOpMode {
 //    public void loop() {
 
         while (opModeIsActive()) {
+
+//            shooterMotor.setPower(targetVelocity);
             telemetry.addLine("Press A to reset Yaw");
             telemetry.addLine("Hold left bumper to drive in robot relative");
             telemetry.addLine("The left joystick sets the robot direction");
@@ -133,11 +135,11 @@ public class Robot15339TeleopMecanumFieldRelativeDrive extends LinearOpMode {
             }
             // If you press the left bumper, you get a drive from the point of view of the robot
             // (much like driving an RC vehicle)
-            if (gamepad1.left_bumper) {
-                drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            } else {
+//            if (gamepad1.left_bumper) {
+//                drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+//            } else {
                 driveFieldRelative(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            }
+//            }
             if (gamepad2.a) {
                 shooterMotor.setPower(1);
 
@@ -183,6 +185,7 @@ public class Robot15339TeleopMecanumFieldRelativeDrive extends LinearOpMode {
             }
         }
     }
+
     // This routine drives the robot field relative
     private void driveFieldRelative(double forward, double right, double rotate) {
         // First, convert direction being asked to drive to polar coordinates

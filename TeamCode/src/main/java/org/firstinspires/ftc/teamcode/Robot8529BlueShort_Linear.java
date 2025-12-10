@@ -219,13 +219,13 @@ public class Robot8529BlueShort_Linear extends LinearOpMode {
             telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
             telemetry.update();
         }
-        sleep(1000);
+        sleep(2000);
         indexServo1.setPower(1);
         indexServo2.setPower(-1);
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-        sleep(1000);
+        sleep(2000);
         //shoot2
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -237,7 +237,7 @@ public class Robot8529BlueShort_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-        sleep(1000);
+        sleep(2000);
         //shoot3
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -249,7 +249,7 @@ public class Robot8529BlueShort_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-        sleep(1000);
+        sleep(2000);
         //shoot4
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -261,9 +261,9 @@ public class Robot8529BlueShort_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-
-turnToHeading(turnSpeed, -60);
-driveStraight(driveSpeed,-30,-60);
+        sleep(5000);
+        turnToHeading(1, 120);
+        driveStraight(1,30,120);
 
 //        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
 //        holdHeading( TURN_SPEED, 47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second

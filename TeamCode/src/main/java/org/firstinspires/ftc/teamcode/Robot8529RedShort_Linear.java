@@ -264,9 +264,9 @@ public class Robot8529RedShort_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-
-        turnToHeading(turnSpeed, 60);
-        driveStraight(driveSpeed,-30,60);
+        sleep(5000);
+        turnToHeading(1,-147);
+        driveStraight(1, 30, -147);
 
 //        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees
 //        holdHeading( TURN_SPEED, 47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second

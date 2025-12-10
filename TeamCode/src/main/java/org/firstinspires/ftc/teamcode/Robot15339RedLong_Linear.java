@@ -146,7 +146,7 @@ public class Robot15339RedLong_Linear extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        double targetVelocity = 1300;
+        double targetVelocity = 1250;
 
 
 
@@ -210,7 +210,7 @@ public class Robot15339RedLong_Linear extends LinearOpMode {
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
 
-        driveStraight(DRIVE_SPEED, 65.0, 0.0);    // Drive Forward 24"
+        driveStraight(DRIVE_SPEED, 66.0, 0.0);    // Drive Forward 24"
         turnToHeading( TURN_SPEED, -47.0);               // Turn  CW to -45 Degrees y9-\
         holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
         driveStraight(DRIVE_SPEED, 50,-47.0);
@@ -264,6 +264,9 @@ public class Robot15339RedLong_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
+        sleep(5000);
+        turnToHeading(TURN_SPEED,-120);
+        driveStraight(DRIVE_SPEED,30.0,-120.0);
 
 
 //        turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees

@@ -146,7 +146,7 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        double targetVelocity = 1300;
+        double targetVelocity = 1250;
 
 
         // Initialize the drive system variables.
@@ -208,10 +208,25 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
         shooterMotor.setVelocity(targetVelocity);
         driveStraight(DRIVE_SPEED, 67.0, 0.0);    // Drive Forward 24"
+        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
         turnToHeading( TURN_SPEED, 47.0);               // Turn  CW to -45 Degrees y9-\
-//        holdHeading( TURN_SPEED, -47.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
         driveStraight(DRIVE_SPEED, 50,47.0);
 
+
+
+        shooterMotor.setVelocity(targetVelocity);
+        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+            telemetry.update();
+        }
+        indexServo1.setPower(1);
+        indexServo2.setPower(-1);
+        sleep(250); // feed duration
+        indexServo1.setPower(-1);
+        indexServo2.setPower(1);
+        sleep(1000);
+        turnToHeading (TURN_SPEED, 165.0);
+        driveStraight(DRIVE_SPEED,30.0,165.0);
         sleep(2500);
         //shoot1
         shooterMotor.setVelocity(targetVelocity);
@@ -237,7 +252,7 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-        sleep(1000);
+        sleep(3000);
         //shoot3
         shooterMotor.setVelocity(targetVelocity);
         while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
@@ -249,18 +264,12 @@ public class Robot15339BlueLong_Linear extends LinearOpMode {
         sleep(250); // feed duration
         indexServo1.setPower(-1);
         indexServo2.setPower(1);
-        sleep(1000);
-        //shoot4
-        shooterMotor.setVelocity(targetVelocity);
-        while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
-            telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
-            telemetry.update();
-        }
-        indexServo1.setPower(1);
-        indexServo2.setPower(-1);
-        sleep(250); // feed duration
-        indexServo1.setPower(-1);
-        indexServo2.setPower(1);
+        sleep(5000);
+        turnToHeading (TURN_SPEED, 120.0);
+        driveStraight(DRIVE_SPEED,30.0,120.0);
+
+
+
 
 
 
