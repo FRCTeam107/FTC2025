@@ -29,12 +29,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -65,9 +64,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Telop: Go Vroom", group="Linear OpMode")
-@Disabled
-public class BasicOmniOpMode_Linear extends LinearOpMode {
+@TeleOp(name="Telop: Old Drive", group="Linear OpMode")
+//@Disabled
+public class AutoShootTeleopLinear extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
@@ -75,9 +74,12 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
-    private DcMotor shooterMotor = null;
+    private DcMotorEx shooterMotor = null;
     private CRServo indexServo1 = null;
     private CRServo indexServo2 = null;
+
+
+    double targetVelocity = 1250;
 
     @Override
     public void runOpMode() {
@@ -88,7 +90,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
-        shooterMotor = hardwareMap.get(DcMotor.class, "shooter_motor");
+        shooterMotor = hardwareMap.get(DcMotorEx.class, "shooter_motor");
         indexServo1 = hardwareMap.get(CRServo.class, "index_servo_1");
         indexServo2 = hardwareMap.get(CRServo.class, "index_servo_2");
 
@@ -111,10 +113,15 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         shooterMotor.setDirection(DcMotor.Direction.FORWARD);
 
 
+
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+        shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        shooterMotor.setVelocity(targetVelocity);
 
 
         // Wait for the game to start (driver presses START)
@@ -153,21 +160,53 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
                 backRightPower  /= max;
             }
 
-            if (gamepad1.a){
-                shooterMotor.setPower(0.7);
+            if (gamepad2.a){
+                shooterMotor.setPower(1);
+
+//                double velocity = shooterMotor.getVelocity(); // ticks per second
+//                telemetry.addData("Shooter Velocity", velocity);
+//                telemetry.update();
+
             }
+
             else {
                 shooterMotor.setPower(0);
             }
 
+            if(gamepad2.y){
+                shooterMotor.setPower(-1);
+            }
+
+            if(gamepad2.b){
+
+                shooterMotor.setVelocity(targetVelocity);
+                frontLeftDrive.setPower(0);
+                frontRightDrive.setPower(0);
+                backLeftDrive.setPower(0);
+                backRightDrive.setPower(0);
+
+                while (opModeIsActive() && shooterMotor.getVelocity() < targetVelocity) {
+
+                    telemetry.addData("Shooter Velocity", shooterMotor.getVelocity());
+                    telemetry.update();
+                }
+
+                indexServo1.setPower(1);
+                indexServo2.setPower(-1);
+                sleep(250); // feed duration
+                indexServo1.setPower(-1);
+                indexServo2.setPower(1);
+
+
+            }
 
             if (gamepad1.right_bumper){
                 indexServo1.setPower(1);
                 indexServo2.setPower(-1);
             }
             else {
-                indexServo1.setPower(0);
-                indexServo2.setPower(0);
+                indexServo1.setPower(-1);
+                indexServo2.setPower(1);
             }
 
 
